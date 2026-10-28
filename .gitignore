@@ -1,0 +1,28 @@
+# 敏感信息 —— 绝不提交
+.ha_token
+*.token
+.env
+secrets.yaml
+
+# 私有环境
+*.har
+*.pcap
+*.apk
+*.dex
+panel5_base.png
+panel5_elements.json
+panel5_meta.json
+panel5_image.json
+*.png
+*.jpg
+*.jpeg
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 系统
+.DS_Store
+Thumbs.db
