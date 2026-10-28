@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ha-colmo-panel 项目预览</title>
+<style>
+  :root {
+    --bg: #0d0f12;
+    --card: #181c22;
+    --edge: #2a2f38;
+    --txt: #e8ecf1;
+    --sub: #8892a0;
+    --accent: #38bdf8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--txt);
+    font-family: "Microsoft YaHei", "PingFang SC", -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 32px 20px;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  h1 {
+    font-size: 26px;
+    margin-bottom: 8px;
+    letter-spacing: .5px;
+  }
+  h2 {
+    font-size: 20px;
+    margin: 32px 0 14px;
+    padding-left: 10px;
+    border-left: 3px solid var(--accent);
+  }
+  p { color: #c6cdd6; margin-bottom: 10px; font-size: 15px; }
+  .lead { color: var(--sub); font-size: 15px; margin-bottom: 6px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--edge);
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+  }
+  .overview ol {
+    padding-left: 22px;
+    color: #c6cdd6;
+  }
+  .overview ol li { margin-bottom: 8px; font-size: 15px; }
+  .overview ol li b { color: var(--accent); font-weight: 600; }
+  .shot {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid var(--edge);
+    display: block;
+  }
+  .cap {
+    color: var(--sub);
+    font-size: 13px;
+    margin-top: 8px;
+    text-align: center;
+  }
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .toc span {
+    background: var(--card);
+    border: 1px solid var(--edge);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 13px;
+    color: #b8c0cc;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(56,189,248,.12);
+    color: var(--accent);
+    border: 1px solid rgba(56,189,248,.35);
+    border-radius: 6px;
+    padding: 2px 10px;
+    font-size: 12px;
+    margin-right: 8px;
+  }
+  .note {
+    background: rgba(245,158,11,.08);
+    border: 1px solid rgba(245,158,11,.25);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #e8c987;
+    margin: 16px 0;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>COLMO 智慧屏 → Home Assistant 全屋中控 改造教程</h1>
+  <p class="lead">把一块「只能开关自家空调」的 COLMO 智慧屏，改造成一台挂在墙上的 Home Assistant 全屋智能中控屏。</p>
+
+  <h2>项目综述</h2>
+  <div class="card overview">
+    <p>本项目并不改动 COLMO 屏的硬件，而是把它当作一台 <b>Android 平板</b>，用软件手段替换掉出厂锁定的桌面系统：</p>
+    <ol>
+      <li><b>开启调试</b>：通过 COLMO 屏隐藏的开发者入口，打开 USB / 网络 ADB 调试，获得对系统的控制权；</li>
+      <li><b>安装中控 App</b>：在屏上安装 Home Assistant Companion（Android 客户端），让它以 Kiosk 全屏模式常驻；</li>
+      <li><b>页面布局</b>：针对这块 1920×720 的条屏，用 picture-elements 定制一套按房间分组的 Lovelace 控制面板；</li>
+      <li><b>固定屏幕显示</b>：屏保关闭、屏幕常亮，把 HA 设为默认桌面，冷启动/重启后自动直达中控，不留出厂界面；</li>
+      <li><b>调用自带的硬件</b>：把屏上的毫米波雷达、板载温湿度 / VOC 传感器利用起来，实现「有人亮屏、无人息屏」的人感调光，并把环境数据实时上报回 HA。</li>
+    </ol>
+    <p style="margin-top:12px">整套改造是纯软件方案，可逆、不拆机、不刷机（无需 root 也可完成核心功能），改完就是一块真正全屋统一控制的中控屏。</p>
+  </div>
+
+  <h2>最终效果</h2>
+  <div class="card">
+    <img class="shot" src="docs/images/sample-panel.png" alt="样例面板">
+    <p class="cap">上图为通用化示例（房间名、设备、数据均为示例），实际效果取决于你的户型图与设备。</p>
+  </div>
+
+  <div class="note">✅ 样例截图中所有房间名已通用化（客厅 / 餐厅 / 厨房 / 主卧 / 儿童房 / 卧室），不含任何真实昵称或私有信息。</div>
+
+  <h2>目录</h2>
+  <div class="toc">
+    <span>这是什么 / 适用人群</span>
+    <span>最终效果</span>
+    <span>前置条件</span>
+    <span>第一步：开启调试</span>
+    <span>第二步：安装 HA Companion</span>
+    <span>第三步：部署常驻脚本</span>
+    <span>第四步：构建中控面板</span>
+    <span>避坑清单</span>
+    <span>风险与免责声明</span>
+    <span>借助 WorkBuddy 复刻</span>
+  </div>
+</div>
+</body>
+</html>

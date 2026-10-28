@@ -17,6 +17,9 @@ panel5_image.json
 *.jpg
 *.jpeg
 
+# 样例截图（通用化、脱敏，用于 README 展示）—— 例外放行
+!docs/images/sample-panel.png
+
 # Python
 __pycache__/
 *.pyc
